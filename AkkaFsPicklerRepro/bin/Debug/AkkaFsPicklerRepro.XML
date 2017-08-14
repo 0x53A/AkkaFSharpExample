@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>AkkaFsPicklerRepro</name></assembly>
+<members>
+<member name="P:FSharp.Control.Tasks.ContextInsensitive.task">
+<summary>
+ Builds a `System.Threading.Tasks.Task&lt;&apos;a&gt;` similarly to a C# async/await method, but with
+ all awaited tasks automatically configured *not* to resume on the captured context.
+ This is often preferable when writing library code that is not context-aware, but undesirable when writing
+ e.g. code that must interact with user interface controls on the same thread as its caller.
+</summary>
+</member>
+<member name="P:FSharp.Control.Tasks.ContextSensitive.task">
+<summary>
+ Builds a `System.Threading.Tasks.Task&lt;&apos;a&gt;` similarly to a C# async/await method.
+ Use this like `task { let! taskResult = someTask(); return taskResult.ToString(); }`.
+</summary>
+</member>
+<member name="F:FSharp.Control.Tasks.TaskBuilder.StepStateMachine`1.continuation">
+<summary>
+ The continuation we left off awaiting on our last MoveNext().
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.StepStateMachine`1.Run">
+<summary>
+ Start execution as a `Task&lt;&apos;m&gt;`.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.StepStateMachine`1.System-Runtime-CompilerServices-IAsyncStateMachine-MoveNext">
+<summary>
+ Proceed to one of three states: result, failure, or awaiting.
+ If awaiting, MoveNext() will be called again when the awaitable completes.
+</summary>
+</member>
+<member name="T:FSharp.Control.Tasks.TaskBuilder.StepStateMachine`1">
+<summary>
+ Implements the machinery of running a `Step&lt;&apos;m, &apos;m&gt;` as a `Task&lt;&apos;m&gt;`.
+</summary>
+</member>
+<member name="T:FSharp.Control.Tasks.TaskBuilder.Step`1">
+<summary>
+ Represents the state of a computation:
+ either awaiting something with a continuation,
+ or completed with a return value.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.run``1(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,FSharp.Control.Tasks.TaskBuilder.Step{``0}})">
+<summary>
+ Runs a step as a task -- with a short-circuit for immediately completed steps.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.forLoop``1(System.Collections.Generic.IEnumerable{``0},Microsoft.FSharp.Core.FSharpFunc{``0,FSharp.Control.Tasks.TaskBuilder.Step{Microsoft.FSharp.Core.Unit}})">
+<summary>
+ Implements a loop that runs `body` for each element in `sequence`.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.using``2(``0,Microsoft.FSharp.Core.FSharpFunc{``0,FSharp.Control.Tasks.TaskBuilder.Step{``1}})">
+<summary>
+ Implements a using statement that disposes `disp` after `body` has completed.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.tryFinally``1(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,FSharp.Control.Tasks.TaskBuilder.Step{``0}},Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,Microsoft.FSharp.Core.Unit})">
+<summary>
+ Wraps a step in a try/finally. This catches exceptions both in the evaluation of the function
+ to retrieve the step, and in the continuation of the step (if any).
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.tryWith``1(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,FSharp.Control.Tasks.TaskBuilder.Step{``0}},Microsoft.FSharp.Core.FSharpFunc{System.Exception,FSharp.Control.Tasks.TaskBuilder.Step{``0}})">
+<summary>
+ Wraps a step in a try/with. This catches exceptions both in the evaluation of the function
+ to retrieve the step, and in the continuation of the step (if any).
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.whileLoop(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,System.Boolean},Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,FSharp.Control.Tasks.TaskBuilder.Step{Microsoft.FSharp.Core.Unit}})">
+<summary>
+ Builds a step that executes the body while the condition predicate is true.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.combine``1(FSharp.Control.Tasks.TaskBuilder.Step{Microsoft.FSharp.Core.Unit},Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,FSharp.Control.Tasks.TaskBuilder.Step{``0}})">
+<summary>
+ Chains together a step with its following step.
+ Note that this requires that the first step has no result.
+ This prevents constructs like `task { return 1; return 2; }`.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.ret``1(``0)">
+<summary>
+ Used to return a value.
+</summary>
+</member>
+<member name="M:FSharp.Control.Tasks.TaskBuilder.zero">
+<summary>
+ Used to represent no-ops like the implicit empty &quot;else&quot; branch of an &quot;if&quot; expression.
+</summary>
+</member>
+</members>
+</doc>

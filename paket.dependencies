@@ -1,0 +1,9 @@
+
+source https://api.nuget.org/v3/index.json
+source CustomNugets
+framework >= net461
+
+nuget System.ValueTuple
+nuget Akka
+nuget Akka.Remote
+nuget FsPickler 3.2.1
